@@ -1,6 +1,7 @@
-export { extractRoutes, processStack, extractPrefixFromRegex } from './routeExtractor';
-export { extractParamsFromPath, generateDoc, generateMarkdown } from './docGenerator';
+export { extractRoutes } from './routeExtractor';
+export { generateDoc, generateMarkdown } from './docGenerator';
 export { startWatcher, stopWatcher } from './syncWatcher';
-export { ensureDirectoryExists, writeDocumentation, readDocumentation, hasDocumentationChanged, writeIfChanged } from './outputWriter';
+export { writeDocumentation, readDocumentation, writeIfChanged } from './outputWriter';
 export { routewatch, stopRoutewatch } from './middlewareFactory';
-export type { RouteWatchOptions } from './middlewareFactory';
+export { validateRoute, validateRoutes } from './schemaValidator';
+export type { ValidationResult, SchemaRule } from './schemaValidator';

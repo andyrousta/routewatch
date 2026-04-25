@@ -38,6 +38,20 @@ export function findInvalidPaths(routes: RouteInfo[]): string[] {
     .map((r) => r.path);
 }
 
+/**
+ * Returns a deduplicated list of routes by method+path key.
+ * When duplicates exist, only the first occurrence is kept.
+ */
+export function deduplicateRoutes(routes: RouteInfo[]): RouteInfo[] {
+  const seen = new Set<string>();
+  return routes.filter((route) => {
+    const key = `${route.method.toUpperCase()}:${route.path}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 export function runHealthCheck(routes: RouteInfo[]): HealthCheckResult {
   const duplicates = findDuplicateRoutes(routes);
   const missingMethods = findMissingMethods(routes);

@@ -1,31 +1,33 @@
-/**
- * Represents a single extracted API route.
- */
 export interface RouteInfo {
   method: string;
   path: string;
-  params?: string[];
+  middlewares: string[];
   description?: string;
   tags?: string[];
   deprecated?: boolean;
+  deprecatedSince?: string;
+  replacedBy?: string;
+  removalDate?: string;
 }
 
-/**
- * Configuration options for the routewatch middleware.
- */
-export interface RouteWatchOptions {
-  outputDir?: string;
-  outputFormat?: 'markdown' | 'json';
-  watch?: boolean;
-  filter?: import('./routeFilter').FilterOptions;
-  onUpdate?: (routes: RouteInfo[]) => void;
+export interface DocConfig {
+  outputPath?: string;
+  format?: 'markdown' | 'json';
+  title?: string;
+  watchMode?: boolean;
+  silent?: boolean;
+  include?: string[];
+  exclude?: string[];
 }
 
-/**
- * Represents the generated documentation output.
- */
-export interface DocOutput {
+export interface RouteWatchOptions extends DocConfig {
+  app: any;
+}
+
+export interface CacheEntry {
+  hash: string;
   routes: RouteInfo[];
-  generatedAt: string;
-  version?: string;
+  timestamp: number;
 }
+
+export type LogLevel = 'info' | 'warn' | 'error' | 'debug';

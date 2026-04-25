@@ -8,8 +8,16 @@ export { filterRoutes, groupRoutesByPrefix, deduplicateRoutes } from './routeFil
 export { formatAsJson, formatAsMarkdown, formatAsSummary } from './routeFormatter';
 export { compareRoutes, hasRouteChanges, formatDiffSummary } from './routeComparator';
 export { setCachedRoutes, getCachedRoutes, isCacheStale, hasCacheChanged } from './routeCache';
-export { configureLogger, log, logRoutesDetected, logRouteChanged, logDocumentationWritten } from './routeLogger';
-export { exportRoutes } from './routeExporter';
-export { runHealthCheck, findDuplicateRoutes, findMissingMethods, findInvalidPaths } from './routeHealthCheck';
+export { configureLogger, log, logRoutesDetected } from './routeLogger';
+export { exportRoutes, renderContent } from './routeExporter';
+export { runHealthCheck } from './routeHealthCheck';
+export { markDeprecated, isDeprecated, applyDeprecations } from './routeDeprecator';
+export {
+  extractVersionFromPath,
+  groupRoutesByVersion,
+  annotateVersions,
+  getLatestVersion,
+  filterByVersion,
+} from './routeVersioner';
+export type { VersionedRoute, VersionMap } from './routeVersioner';
 export type { RouteInfo } from './types';
-export type { HealthCheckResult } from './routeHealthCheck';

@@ -31,6 +31,13 @@ describe('setRateLimit / getRateLimit', () => {
     setRateLimit('get', '/api/items', { windowMs: 1000, maxRequests: 10 });
     expect(getRateLimit('GET', '/api/items')).toBeDefined();
   });
+
+  it('overwrites an existing rate limit config for the same route', () => {
+    setRateLimit('GET', '/api/users', { windowMs: 60000, maxRequests: 100 });
+    setRateLimit('GET', '/api/users', { windowMs: 30000, maxRequests: 50 });
+    const config = getRateLimit('GET', '/api/users');
+    expect(config).toEqual({ windowMs: 30000, maxRequests: 50 });
+  });
 });
 
 describe('applyRateLimitAnnotations', () => {
@@ -62,6 +69,15 @@ describe('applyRateLimitAnnotations', () => {
     expect(result[0].metadata?.deprecated).toBe(true);
     expect(result[0].metadata?.rateLimit).toBeDefined();
   });
+
+  it('annotates multiple routes independently', () => {
+    const secondRoute: RouteInfo = { method: 'POST', path: '/api/orders' };
+    setRateLimit('GET', '/api/users', { windowMs: 60000, maxRequests: 100 });
+    setRateLimit('POST', '/api/orders', { windowMs: 5000, maxRequests: 10 });
+    const result = applyRateLimitAnnotations([baseRoute, secondRoute]);
+    expect(result[0].metadata?.rateLimit?.maxRequests).toBe(100);
+    expect(result[1].metadata?.rateLimit?.maxRequests).toBe(10);
+  });
 });
 
 describe('getRateLimitSummary', () => {
@@ -72,5 +88,10 @@ describe('getRateLimitSummary', () => {
     expect(Object.keys(summary)).toHaveLength(2);
     expect(summary['GET:/api/users']).toBeDefined();
     expect(summary['POST:/api/orders']).toBeDefined();
+  });
+
+  it('returns an empty object when no rate limits are registered', () => {
+    const summary = getRateLimitSummary();
+    expect(summary).toEqual({});
   });
 });

@@ -1,33 +1,39 @@
+export type HttpMethod =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'PATCH'
+  | 'DELETE'
+  | 'OPTIONS'
+  | 'HEAD';
+
+export interface RouteMetadata {
+  deprecated?: boolean;
+  description?: string;
+  tags?: string[];
+  rateLimit?: {
+    max: number;
+    windowMs: number;
+  };
+  auth?: {
+    scheme: string;
+    scopes?: string[];
+    description?: string;
+  };
+  [key: string]: unknown;
+}
+
 export interface RouteInfo {
   method: string;
   path: string;
-  middlewares: string[];
-  description?: string;
-  tags?: string[];
-  deprecated?: boolean;
-  deprecatedSince?: string;
-  replacedBy?: string;
-  removalDate?: string;
+  middleware: string[];
+  metadata?: RouteMetadata;
 }
 
-export interface DocConfig {
-  outputPath?: string;
-  format?: 'markdown' | 'json';
-  title?: string;
-  watchMode?: boolean;
+export interface RouteWatchOptions {
+  output?: string;
+  format?: 'json' | 'markdown';
+  watch?: boolean;
   silent?: boolean;
-  include?: string[];
-  exclude?: string[];
+  logLevel?: 'debug' | 'info' | 'warn' | 'error';
 }
-
-export interface RouteWatchOptions extends DocConfig {
-  app: any;
-}
-
-export interface CacheEntry {
-  hash: string;
-  routes: RouteInfo[];
-  timestamp: number;
-}
-
-export type LogLevel = 'info' | 'warn' | 'error' | 'debug';

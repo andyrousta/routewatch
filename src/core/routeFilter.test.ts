@@ -38,6 +38,17 @@ describe('filterRoutes', () => {
     const result = filterRoutes(sampleRoutes, {});
     expect(result).toHaveLength(sampleRoutes.length);
   });
+
+  it('returns empty array when no routes match', () => {
+    const result = filterRoutes(sampleRoutes, { methods: ['PATCH'] });
+    expect(result).toHaveLength(0);
+  });
+
+  it('applies multiple filters together', () => {
+    const result = filterRoutes(sampleRoutes, { methods: ['GET'], pathPrefix: '/users' });
+    expect(result).toHaveLength(2);
+    expect(result.every((r) => r.method === 'GET' && r.path.startsWith('/users'))).toBe(true);
+  });
 });
 
 describe('groupRoutesByPrefix', () => {
